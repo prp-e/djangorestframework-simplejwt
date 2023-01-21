@@ -51,7 +51,7 @@ class TokenObtainSerializer(serializers.Serializer):
          user = User.objects.get(username=authenticate_kwargs['username'])
          if not user.is_active:
              self.error_messages['no_active_account']=_(
-                 'The account is inactive'
+                 '{ "en": "Your account is not activated. Please go to your emails and actiavate your account", "fa" : "حساب کاربری شما فعال نیست. لطفا با مراجعه به ایمیل‌های خود، آن را فعال کنید."}'
              )
              raise exceptions.AuthenticationFailed(
                  self.error_messages['no_active_account'],
@@ -69,7 +69,7 @@ class TokenObtainSerializer(serializers.Serializer):
 
         if self.user is None:
             self.error_messages['no_active_account'] = _(
-                'Credentials did not match')
+                '{"en": "Invalid Email or Password", "fa": "ایمیل یا کلمه عبور اشتباه است."}')
             raise exceptions.AuthenticationFailed(
                 self.error_messages['no_active_account'],
                 'no_active_account',
