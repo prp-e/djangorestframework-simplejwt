@@ -48,7 +48,7 @@ class TokenObtainSerializer(serializers.Serializer):
             pass
 
         try:
-         user = User.objects.get(email=authenticate_kwargs['email'])
+         user = User.objects.get(username=authenticate_kwargs['username'])
          if not user.is_active:
              self.error_messages['no_active_account']=_(
                  'The account is inactive'
