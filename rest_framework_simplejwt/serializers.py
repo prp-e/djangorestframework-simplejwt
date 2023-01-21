@@ -59,7 +59,7 @@ class TokenObtainSerializer(serializers.Serializer):
              )
         except User.DoesNotExist:
           self.error_messages['no_active_account'] =_(
-              '{"en": "", "fa":""}')
+              '{"en": "This account does not exist", "fa":"کاربری با این مشخصات وجود ندارد"}')
           raise exceptions.AuthenticationFailed(
               self.error_messages['no_active_account'],
               'no_active_account',
