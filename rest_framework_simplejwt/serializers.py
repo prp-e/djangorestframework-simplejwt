@@ -74,7 +74,17 @@ class TokenObtainSerializer(serializers.Serializer):
                 self.error_messages['no_active_account'],
                 'no_active_account',
             )
-        return super().validate(attrs)
+        
+        def get_token(self, user, access=False):
+            token_class = self.token_class
+            
+            return token_class.for_user(user, access=access).token
+        
+        data = {
+            'refresh': self.get_token(self.user),
+            'access': self.get_token(self.user, access=True)
+        }
+        return data
 
 
         # if self.user is None:
