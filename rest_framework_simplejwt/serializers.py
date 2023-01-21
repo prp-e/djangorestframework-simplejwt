@@ -4,6 +4,7 @@ from django.contrib.auth.models import update_last_login
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.exceptions import ValidationError
+from django.contrib.auth.models import User
 
 from .settings import api_settings
 from .tokens import RefreshToken, SlidingToken, UntypedToken
@@ -45,6 +46,24 @@ class TokenObtainSerializer(serializers.Serializer):
             authenticate_kwargs["request"] = self.context["request"]
         except KeyError:
             pass
+
+        try:
+         user = User.objects.get(email=authenticate_kwargs['email'])
+         if not user.is_active:
+             self.error_messages['no_active_account']=_(
+                 'The account is inactive'
+             )
+             raise exceptions.AuthenticationFailed(
+                 self.error_messages['no_active_account'],
+                 'no_active_account',
+             )
+        except User.DoesNotExist:
+          self.error_messages['no_active_account'] =_(
+              'Account does not exist')
+          raise exceptions.AuthenticationFailed(
+              self.error_messages['no_active_account'],
+              'no_active_account',
+          )
 
         self.user = authenticate(**authenticate_kwargs)
 
