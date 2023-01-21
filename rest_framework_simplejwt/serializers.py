@@ -48,14 +48,11 @@ class TokenObtainSerializer(serializers.Serializer):
 
         self.user = authenticate(**authenticate_kwargs)
 
-        if not api_settings.USER_AUTHENTICATION_RULE(self.user) and self.user is not None:
+        if not api_settings.USER_AUTHENTICATION_RULE(self.user) and self.user is None:
             raise exceptions.AuthenticationFailed(
                 self.error_messages["no_active_account"],
                 "no_active_account",
             )
-        elif not self.user.is_active:
-            self.error_messages['no_active_account'] = _(
-                'Your account isn\'t active.')
         elif self.user is None:
             self.error_messages['no_active_account'] = _(
                 'Credentials did not match')
