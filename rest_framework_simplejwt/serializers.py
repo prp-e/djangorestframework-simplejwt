@@ -53,7 +53,7 @@ class TokenObtainSerializer(serializers.Serializer):
                 self.error_messages["no_active_account"],
                 "no_active_account",
             )
-        else:
+        elif self.user is None:
             self.error_messages['no_active_account'] = _(
                 'Credentials did not match')
             raise exceptions.AuthenticationFailed(
